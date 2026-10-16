@@ -1,4 +1,15 @@
 ---
+import { API_URL } from "astro:env/server"
+
+const  titulo = " Pagina Principal Lab III"
+
+const getUsers = async(page, limit) => {
+	console.log(API_URL, "URL delServidor")
+	const  users = await fetch(`${API_URL}/user/users`)
+	return users.json()
+}
+const  usersResult = await getUsers(1,4)
+console.log(usersResult)
 ---
 
 <html lang="en">
@@ -8,9 +19,32 @@
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<title>{titulo}</title>
 	</head>
 	<body>
-		<h1>Astro</h1>
+		<h1>Usuarios</h1>
+		<table>
+			<tr>
+				<th>ID</th>
+				<th>Nombre</th>
+				<th>Email</th>
+				<th>Creado</th>
+			</tr>
+			<tr>
+				<td>Alfreds Futterkiste</td>
+				<td>Maria Anders</td>
+				<td>Germany</td>
+				<td>Germany</td>
+			</tr>
+			<tr>
+				<td>Centro comercial Moctezuma</td>
+				<td>Francisco Chang</td>
+				<td>Mexico</td>
+				<td>Mexico</td>
+			</tr>
+		</table>
+		<script type="module" >
+			console.log("Hola estoy en el html")
+		</script>
 	</body>
 </html>
