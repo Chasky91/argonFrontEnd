@@ -1,15 +1,24 @@
 ---
 import { API_URL } from "astro:env/server"
 
+
 const  titulo = " Pagina Principal Lab III"
 
-const getUsers = async(page, limit) => {
+const getUsers = async() => {
 	console.log(API_URL, "URL delServidor")
+	//GET http://localhost:3000/user/users?page=1&limit=4
 	const  users = await fetch(`${API_URL}/user/users`)
 	return users.json()
 }
-const  usersResult = await getUsers(1,4)
-console.log(usersResult)
+
+const  page = Number(Astro.url.searchParams.get("page")) ?? "No hay  page" //rescatamos  el  valor  de  la  url  de  page
+const pageParam = Number.isInteger(page) && page > 0 ? page : 1
+
+const limite = 5
+
+console.log(pageParam)
+const  usersResult = await getUsers()
+console.log(usersResult.totalItems, "Total Items")
 ---
 
 <html lang="en">
@@ -30,19 +39,20 @@ console.log(usersResult)
 				<th>Email</th>
 				<th>Creado</th>
 			</tr>
-			<tr>
-				<td>Alfreds Futterkiste</td>
-				<td>Maria Anders</td>
-				<td>Germany</td>
-				<td>Germany</td>
-			</tr>
-			<tr>
-				<td>Centro comercial Moctezuma</td>
-				<td>Francisco Chang</td>
-				<td>Mexico</td>
-				<td>Mexico</td>
-			</tr>
+			{usersResult.result.map((u) => (
+				<tr>
+					<td>{u.id}</td>
+					<td>{u.name}</td>
+					<td>{u.email}</td>
+					<td>{u.created_at}</td>
+				</tr>
+			) )}
+			
+
 		</table>
+		<p>Cantidad  de paginas {usersResult.totalPages}</p>
+		<p>Pagina {usersResult.currentPage}</p>
+		<p>Número de usuarios {usersResult.totalItems}</p>
 		<script type="module" >
 			console.log("Hola estoy en el html")
 		</script>
